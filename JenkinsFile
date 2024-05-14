@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
           steps {
-            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://your-github-repo-url']])
+            checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/SunilPandey01/FirstGitHubDemo.git']])
           }
         }
         stage('Docker Build') {
