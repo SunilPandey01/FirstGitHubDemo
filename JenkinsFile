@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+    environment {
+        AWS_ACCOUNT_ID=""
+        AWS_DEFAULT_REGION="us-east-1"
+        IMAGE_REPO_NAME="demo-amazon-inspector"
+        IMAGE_TAG="latest"
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+        // Define Vulnerability Thresholds
+        HIGH_LIMIT = 1
+        CRITICAL_LIMIT = 1
+        MEDIUM_LIMIT = 2
+        LOW_LIMIT = 3
+    }
+    stages {
+        stage('Git Checkout') {
+          steps {
+            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://your-github-repo-url']])
+          }
+        }
+        stage('Docker Build') {
+          steps {
+            script {
+              dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+            }
+          }
+        }
+        stage('Amazon Inspector SBOM Generator') {
+          steps {
+            script {
+              sh '/opt/inspector/inspector-sbomgen container --image "${IMAGE_REPO_NAME}:${IMAGE_TAG}" -o sbom_path.json'
+            }
+        }
+        }
+        stage('Amazon Inspector API Scan') {
+          steps {
+            script {
+              sh '''aws inspector-scan scan-sbom --sbom file://sbom_path.json --endpoint https://inspector-scan.us-east-1.amazonaws.com --region us-east-1 --output-format INSPECTOR --output json | jq -s '.' > scan.json'''
+              sh '''python3 threshold.py -H ${HIGH_LIMIT} -c ${CRITICAL_LIMIT} -m ${MEDIUM_LIMIT} -l ${LOW_LIMIT} scan.json'''
+         }
+        }
+        } 
+        stage('Push image to ECR') {
+          steps {
+            script {
+                sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+                sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+
+            }
+          }
+        }
+    }
+}
