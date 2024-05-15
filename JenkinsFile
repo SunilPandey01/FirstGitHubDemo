@@ -35,7 +35,7 @@ pipeline {
         stage('Amazon Inspector API Scan') {
           steps {
             script {
-              sh '''aws inspector-scan scan-sbom --sbom file://sbom_path.json --endpoint https://inspector-scan.us-east-1.amazonaws.com --region us-east-1 --output-format INSPECTOR --output json | jq -s '.' > scan.json'''
+              sh '''aws --profile assure-eqh-dev-readonly inspector-scan scan-sbom --sbom file://sbom_path.json --endpoint https://inspector-scan.us-east-1.amazonaws.com --region us-east-1 --output-format INSPECTOR --output json | jq -s '.' > scan.json'''
               sh '''python3 threshold.py -H ${HIGH_LIMIT} -c ${CRITICAL_LIMIT} -m ${MEDIUM_LIMIT} -l ${LOW_LIMIT} scan.json'''
          }
         }
