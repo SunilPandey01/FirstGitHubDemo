@@ -45,6 +45,7 @@ pipeline {
               sh '''aws inspector-scan scan-sbom --sbom file://sbom_path.json --endpoint https://inspector-scan.us-east-1.amazonaws.com --region us-east-1 --output-format INSPECTOR --output json --profile equitable-annuity-sandbox-poweru | jq -s '.' > scan.json'''
               sh '''aws inspector-scan scan-sbom --sbom file://sbom_path.json --endpoint https://inspector-scan.us-east-1.amazonaws.com --region us-east-1 --output-format INSPECTOR --output html --profile equitable-annuity-sandbox-poweru  > scan.html'''
               sh '''python3 vulnerability_thresholds.py -H ${HIGH_LIMIT} -c ${CRITICAL_LIMIT} -m ${MEDIUM_LIMIT} -l ${LOW_LIMIT} scan.json'''
+              archiveArtifacts artifacts: 'scan.html'
          }
         }
         } 
@@ -54,7 +55,7 @@ pipeline {
           script {
             sh "pwd"
           }
-            archiveArtifacts artifacts: '*.json', artifacts: 'scan.html'
+            archiveArtifacts artifacts: '*.json'
         }
     }
 }
