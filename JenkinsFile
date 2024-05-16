@@ -53,7 +53,7 @@ pipeline {
           script {
             sh "pwd"
           }
-            archiveArtifacts artifacts: 'sbom_path.json'
+            archiveArtifacts artifacts: 'sbom_path.json' , 'scan.json'
         }
     }
 }
