@@ -54,7 +54,7 @@ pipeline {
           script {
             sh "pwd"
           }
-            archiveArtifacts: '*.json','scan.html'
+            archiveArtifacts artifacts: '*.json', artifacts: 'scan.html'
         }
     }
 }
