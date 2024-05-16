@@ -58,4 +58,9 @@ pipeline {
           }
         }
     }
+    post {
+        always {
+            archiveArtifacts artifacts: '/var/lib/jenkins/workspace/first-pipeline/sbom_path.json', fingerprint: true
+        }
+    }
 }
