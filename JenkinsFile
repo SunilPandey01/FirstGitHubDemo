@@ -63,7 +63,7 @@ pipeline {
           script {
             sh "pwd"
           }
-            archiveArtifacts artifacts: '/var/lib/jenkins/workspace/first-pipeline/sbom_path.json', fingerprint: true
+            archiveArtifacts artifacts: 'sbom_path.json'
         }
     }
 }
