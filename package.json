@@ -1,0 +1,16 @@
+{
+  "name": "awd-apis",
+  "version": "1.0.0",
+  "main": "api.js",
+  "scripts": {
+    "start": "node src/api.js"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1069.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.1",
+    "minimist": "^1.2.6",
+    "openpgp": "^5.1.0"
+  }
+}
