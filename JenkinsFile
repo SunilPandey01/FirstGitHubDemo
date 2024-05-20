@@ -42,7 +42,7 @@ pipeline {
           steps {
             script {
               sh "aws sts assume-role --role-arn arn:aws:iam::638193415387:role/equitable-annuity-sandbox-poweru --serial-number arn:aws:iam::618277986274:mfa/sunil.pandey2 --query Credentials --token-code ${mfa} --role-session-name jenkins-user"
-              sh '''aws inspector-scan scan-sbom --sbom file://sbom_path.json --endpoint https://inspector-scan.us-east-1.amazonaws.com --region us-east-1 --output-format INSPECTOR --output json | jq -s '.' > scan.json'''
+              sh '''aws inspector-scan scan-sbom --sbom file://sbom_path.json --endpoint https://inspector-scan.us-east-1.amazonaws.com --region us-east-1 --output-format INSPECTOR --output json --profile equitable-annuity-sandbox-poweru | jq -s '.' > scan.json'''
               //sh '''python3 vulnerability_thresholds.py -H ${HIGH_LIMIT} -c ${CRITICAL_LIMIT} -m ${MEDIUM_LIMIT} -l ${LOW_LIMIT} scan.json'''
          }
         }
