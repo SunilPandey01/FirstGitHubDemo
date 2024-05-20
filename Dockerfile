@@ -2,8 +2,7 @@
 #FROM alpine:3.15.4
 FROM node:20-alpine3.18
 RUN apk -U upgrade
-RUN ls
-COPY . /home/node
+#COPY . /home/node
 RUN cd /home/node; \
 	npm install
 
