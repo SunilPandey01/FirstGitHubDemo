@@ -42,12 +42,12 @@ pipeline {
           steps {
             script {
                def SBOMGEN_VERSION='1.1.0'
-                        def SBOMGEN_DOWNLOAD_URL="https://amazon-inspector-sbomgen.s3.amazonaws.com/${SBOMGEN_VERSION}/linux/arm64/inspector-sbomgen.zip"
+                        def SBOMGEN_DOWNLOAD_URL="https://amazon-inspector-sbomgen.s3.amazonaws.com/${SBOMGEN_VERSION}/linux/amd64/inspector-sbomgen.zip"
  
                         sh "wget ${SBOMGEN_DOWNLOAD_URL}"
                         sh "unzip -d inspector-sbomgen inspector-sbomgen.zip"
                         sh """
-                                    cd inspector-sbomgen/inspector-sbomgen-${SBOMGEN_VERSION}/linux/arm64
+                                    cd inspector-sbomgen/inspector-sbomgen-${SBOMGEN_VERSION}/linux/amd64
                                     ls -l
                                     chmod +x inspector-sbomgen                                    
                                     ./inspector-sbomgen --version
