@@ -31,13 +31,13 @@ pipeline {
             }
           }
         }
-#        stage('Amazon Inspector SBOM Generator') {
-#          steps {
-#            script {
-#              sh '/opt/inspector-sbomgen-1.1.1/linux/amd64/inspector-sbomgen container --image "${IMAGE_REPO_NAME}:${IMAGE_TAG}" -o sbom_path.json'
-#            }
-#        }
-#        }
+ ##        stage('Amazon Inspector SBOM Generator') {
+ ##          steps {
+ ##            script {
+ ##              sh '/opt/inspector-sbomgen-1.1.1/linux/amd64/inspector-sbomgen container --image "${IMAGE_REPO_NAME}:${IMAGE_TAG}" -o sbom_path.json'
+ ##            }
+ ##        }
+ ##        }
         stage('Inspector SBOM') {
           steps {
             script {
